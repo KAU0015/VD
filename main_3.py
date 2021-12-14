@@ -93,7 +93,7 @@ def generateGridPoints(size = 10, step = 0.1):
             x += step
         y += step
         count += 1
-    print(count)
+  #  print(count)
     return points
 
 
@@ -130,8 +130,8 @@ def newtonMetod(point, quad):
         
         r = nextSolution[0]
         s = nextSolution[1]
-    print(r)
-    print(s)
+   # print(r)
+    #print(s)
     return MyPoint(r, s)
 
 

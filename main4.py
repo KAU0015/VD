@@ -57,33 +57,33 @@ def scatteredPointInterpolation(pointsZ, knn):
         y_id += 1
     return raster
 
+def main():
+    plt.figure(1)
+
+    pointsXY = generatePointsXY(100)
+    pointsZ = generatePointsZ(pointsXY)
+
+    sample_domain_plot = plt.axes(projection='3d')
+    sample_domain_plot.scatter3D(pointsXY[:,0], pointsXY[:,1], pointsZ, c=pointsZ, cmap="hot")
+
+    plt.figure(2)
+    plt.scatter(pointsXY[:,0], pointsXY[:,1], c=pointsZ, cmap="hot")
+    plt.colorbar()
+
+    knn = NearestNeighbors(n_neighbors=5)
+    knn.fit(pointsXY)
 
 
+    raster=scatteredPointInterpolation(pointsZ, knn)
+            
+
+    plt.figure(3)
+    plt.imshow(raster, cmap="hot", interpolation='nearest')
+    plt.colorbar()
 
 
-plt.figure(1)
-
-pointsXY = generatePointsXY(100)
-pointsZ = generatePointsZ(pointsXY)
-
-sample_domain_plot = plt.axes(projection='3d')
-sample_domain_plot.scatter3D(pointsXY[:,0], pointsXY[:,1], pointsZ, c=pointsZ, cmap="hot")
-
-plt.figure(2)
-plt.scatter(pointsXY[:,0], pointsXY[:,1], c=pointsZ, cmap="hot")
-plt.colorbar()
-
-knn = NearestNeighbors(n_neighbors=5)
-knn.fit(pointsXY)
+    plt.show()
 
 
-raster=scatteredPointInterpolation(pointsZ, knn)
-		
-
-plt.figure(3)
-plt.imshow(raster, cmap="hot", interpolation='nearest')
-plt.colorbar()
-
-
-plt.show()
-
+if __name__ == "__main__":    
+  main()
