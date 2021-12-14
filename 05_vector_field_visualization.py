@@ -58,7 +58,7 @@ def generatePoints(count):
 
 def main():
     plt.ion()
-    randomPoints = generatePoints(100)
+    randomPoints = generatePoints(200)
     for time in range(0, 1000, 1):
         
         file_open = cv2.FileStorage(PATH + "/u" + "{:05d}".format(time) + ".yml", cv2.FILE_STORAGE_READ)
@@ -126,7 +126,7 @@ def main():
         # Add next point to same spot
         randomPoints.append(Point(40.0, 250.0, True))
 
-        plt.savefig(PATH + "_out/" + "{:05d}".format(time) + "_rk2.jpg")
+        plt.savefig(PATH + "_out/" + "{:05d}".format(time) + "_image.jpg")
         plt.draw()
         plt.pause(0.00001)
         plt.clf()

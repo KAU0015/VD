@@ -34,7 +34,7 @@ def showResult(result):
 
 def scatteredPointInterpolation(pointsZ, knn):
     LAMBDA = 0.001
-    MAX_DISTANCE = 75
+    MAX_DISTANCE = 100
     result = []
     y_id = 0
     for y in range(-200, 200, 1):
@@ -42,21 +42,21 @@ def scatteredPointInterpolation(pointsZ, knn):
         for x in range(-200, 200, 1):
             query_point = np.array([x, y])
 
-            nearestPoints = knn.kneighbors(query_point.reshape(1, -1), return_distance=True)
-            nearestPointsIndexes = nearestPoints[1][0]
-            nearestPointsDistances = nearestPoints[0][0]
+            nearest_points_result = knn.kneighbors(query_point.reshape(1, -1), return_distance=True)
+            nearest_points_idx = nearest_points_result[1][0]
+            nearest_distances = nearest_points_result[0][0]
             
-            R = sum(nearestPointsDistances)/5.0
+            R_p = nearest_distances[0]
 
 
             sum_numerator = 0.0
             sum_denominator = 0.0
-            for i in range(len(nearestPointsIndexes)):
-                if nearestPointsDistances[i] > MAX_DISTANCE: break
-                f_i = pointsZ[nearestPointsIndexes[i]]
-#np.power((actual_value-predicted_value),2)
-                sum_numerator += f_i * np.exp(1 * pow( abs(nearestPointsDistances[i] / R), 2))
-                sum_denominator += np.exp(1 * pow( abs(nearestPointsDistances[i] / R), 2))
+            for i in range(len(nearest_points_idx)):
+                if nearest_distances[i] > MAX_DISTANCE: break
+                f_i = pointsZ[nearest_points_idx[i]]
+
+                sum_numerator += f_i * np.exp(LAMBDA * pow( abs(nearest_distances[i] / R_p), 2))
+                sum_denominator += np.exp(LAMBDA * pow( abs(nearest_distances[i] / R_p), 2))
 
             f_lambda = sum_numerator / sum_denominator if sum_denominator != 0.0 else 0.0
             result[y_id].append(f_lambda)
@@ -68,7 +68,7 @@ def scatteredPointInterpolation(pointsZ, knn):
 
 def main():
 
-    pointsXY, pointsZ = generatePoints(100)
+    pointsXY, pointsZ = generatePoints(1000)
     showPointsIn3D(pointsXY, pointsZ)
     
     knn = NearestNeighbors(n_neighbors=5)
